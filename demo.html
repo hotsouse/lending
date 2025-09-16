@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MindMate — Эмоциональный ментор</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .chat-container {
+      width: 380px;
+      max-width: 90%;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      max-height: 90vh;
+    }
+    .message {
+      padding: 10px 15px;
+      border-radius: 15px;
+      margin: 10px 0;
+      max-width: 80%;
+      line-height: 1.4em;
+    }
+    .bot {
+      background: #e1f0ff;
+      align-self: flex-start;
+    }
+    .user {
+      background: #d0ffd6;
+      align-self: flex-end;
+    }
+    .buttons, .input-block {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    button {
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      background: #4a90e2;
+      color: white;
+      font-size: 14px;
+      transition: 0.2s;
+    }
+    button:hover {
+      background: #357abd;
+    }
+    input[type="text"], input[type="email"] {
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container" id="chat">
+    <div class="message bot">👋 Привет! Я MindMate, твой эмоциональный ментор. Как твоё настроение сегодня?</div>
+    <div class="buttons" id="startButtons">
+      <button onclick="showResponse('Хорошо')">Хорошо 🙂</button>
+      <button onclick="showResponse('Плохо')">Плохо 😔</button>
+    </div>
+  </div>
+
+  <script>
+    function showResponse(choice) {
+      const chat = document.getElementById("chat");
+      document.getElementById("startButtons").remove();
+
+      // Добавляем ответ пользователя
+      let userMsg = document.createElement("div");
+      userMsg.className = "message user";
+      userMsg.innerText = choice;
+      chat.appendChild(userMsg);
+
+      // Ответ бота
+      let botMsg = document.createElement("div");
+      botMsg.className = "message bot";
+
+      if (choice === "Хорошо") {
+        botMsg.innerText = "Отлично! 🎉 Держи мини-челлендж: напиши 3 вещи, за которые ты благодарен сегодня.";
+        chat.appendChild(botMsg);
+
+        // Инпут для ответа
+        let inputBlock = document.createElement("div");
+        inputBlock.className = "input-block";
+        inputBlock.innerHTML = `
+          <input type="text" id="gratitudeInput" placeholder="Напиши здесь..." />
+          <button onclick="submitGratitude()">Отправить</button>
+        `;
+        chat.appendChild(inputBlock);
+
+      } else {
+        botMsg.innerText = "Понимаю 😔 Попробуй дыхательную практику: вдох на 4 сек, задержка на 4, выдох на 6.";
+        chat.appendChild(botMsg);
+
+        let nextDiv = document.createElement("div");
+        nextDiv.className = "buttons";
+        nextDiv.innerHTML = `<button onclick="finishChat()">Продолжить ➡️</button>`;
+        chat.appendChild(nextDiv);
+      }
+    }
+
+    function submitGratitude() {
+      const input = document.getElementById("gratitudeInput");
+      const text = input.value.trim();
+      if (!text) return;
+
+      const chat = document.getElementById("chat");
+
+      // Показать сообщение пользователя
+      let userMsg = document.createElement("div");
+      userMsg.className = "message user";
+      userMsg.innerText = text;
+      chat.appendChild(userMsg);
+
+      // Убираем поле ввода
+      input.parentElement.remove();
+
+      // Ответ бота
+      let botMsg = document.createElement("div");
+      botMsg.className = "message bot";
+      botMsg.innerText = "Спасибо, что поделился 🙏 Это очень ценно. Видишь, у тебя уже есть хорошие моменты!";
+      chat.appendChild(botMsg);
+
+      // Кнопка продолжить
+      let nextDiv = document.createElement("div");
+      nextDiv.className = "buttons";
+      nextDiv.innerHTML = `<button onclick="finishChat()">Продолжить ➡️</button>`;
+      chat.appendChild(nextDiv);
+    }
+
+    function finishChat() {
+      const chat = document.getElementById("chat");
+
+      let botMsg = document.createElement("div");
+      botMsg.className = "message bot";
+      botMsg.innerText = "✨ Хочешь получать такие советы каждый день? Заполни форму ниже!";
+      chat.appendChild(botMsg);
+
+      let formDiv = document.createElement("div");
+      formDiv.innerHTML = `
+        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdFZNcGD6dbmqi6TiK_UgQSLMXHaRZ_9xJ5xj4xWNCW3C73Eg/viewform?usp=header"
+
+                width="100%" 
+                height="600" 
+                frameborder="0" 
+                marginheight="0" 
+                marginwidth="0">
+        Загрузка…
+        </iframe>
+      `;
+      chat.appendChild(formDiv);
+    }
+  </script>
+</body>
+</html>
